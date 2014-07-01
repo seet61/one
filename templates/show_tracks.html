@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block body %}
+	{% if session.logged_in %}
+		<ul classentries>
+			{% for entry in entries %}
+				<li><h2>{{ entry.title }}</h2>{{ entry.text|safe }}
+			{% else %}
+				<li><em>No such tracks for you.</em>
+			{% endfor %}
+		</ul>
+	{% endif %}
+{% endblock %}
