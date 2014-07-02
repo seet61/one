@@ -1,4 +1,4 @@
-drop table if exists entries;
+drop table if exists tracks;
 drop table if exists users;
 create table tracks (
 	id integer primary key autoincrement,

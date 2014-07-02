@@ -7,12 +7,13 @@
 """
 
 # все импорты
-import os, sqlite3
+import os, sqlite3, re
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash
 
 # конфигурация
-DATABASE = '/tmp/flaskr.db'
+pattern = "[a-zA-Zа-яА-Я0-9]"
+DATABASE = 'one.db'
 DEBUG = True
 SECRET_KEY = "\x972\x0e'\xe9\x89\xa0\xd6\xa7\xbe\x88\xe1\xb7s\x06\xf4\xb63\xd5J"
 
@@ -62,12 +63,12 @@ def show_tracks():
     """Получаем список треков для главной страницы"""
     #Если пользователь не вошел в систему, то редирект на страницу авторизации
     if not session.get('logged_in'):
-        redirect(url_for('login'))
+        return redirect(url_for('login'))
     else:
         db = get_db()
         cur = db.execute('select artist, title from tracks order by id desc')
         entries = cur.fetchall()
-    return render_template('show_tracks.html', )
+    return render_template('show_tracks.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -91,7 +92,43 @@ def logout():
     flash('You were logged out.')
     return redirect(url_for('login'))
 
+@app.route('/registration', methods=['GET', 'POST'])
+def registration():
+    """Страница регистрации"""
+    error=None
+    if request.method == 'POST':
+        if not re.search(pattern, request.form['username']):
+            error = 'Invalid username'
+        elif not re.search(pattern, request.form['password']):
+            error = 'Invalid password'
+        else:
+            db = get_db()
+            db.execute('insert into users (login, password) values (?, ?)',
+                    [request.form['username'], request.form['password']])
+        return redirect(url_for('login'))
+    return render_template('registration.html', error=error)
+
+@app.route('/information', methods=['GET', 'POST'])
+def information():
+    """Страница внесения информации для работы скрипта vkMusicSync"""
+    error=None
+    #необходимо создать таблицу с информацией о пользователе
+    if request.method == 'POST':
+        db = get_db()
+        db.execute('insert into vkinfo (username, vkid, password) values (?, ?, ?)',  
+                [request.form['username'], request.form['vkid'], request.form['password']])
+        #if request.form['vkid'] != app.config['USERNAME']:
+        #    error = 'Invalid username'
+        #elif request.form['password'] != app.config['PASSWORD']:
+        #    error = 'Invalid password'
+        #else:
+        #    session['logged_in'] = True
+        #    flash('You were logged in.')
+        #    return redirect(url_for('show_tracks'))
+    return render_template('information.html', error=error)    
+        
+
 if __name__ == '__main__':
-    app.run()
+    app.run('172.26.17.88')
 
 

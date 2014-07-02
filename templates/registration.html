@@ -1,19 +1,14 @@
 {% extends "layout.html" %}
 {% block body %}
-	<h2>Login</h2>
+	<h2>Registration</h2>
 	{% if error %}<p class=error><strong>Error</strong> {{ error }}{% endif %}
-	<form action="{{  url_for('login') }}" method=post>
+	<form action="{{  url_for('registration') }}" method=post>
 		<dl>
 			<dt>Username:
 			<dd><input type=text name=username>
 			<dt>Password:
 			<dd><input type=password name=password>
-			<dd><input type=Submit value=Login>
-		</dl>
-	</form> 
-	<form action="{{ url_for('registration') }}" method=get>
-		<dl>
-			<dd><input type=Submit value=Registration>
+			<dd><input type=Submit value='Sign up'>
 		</dl>
 	</form>
 {% endblock %}
