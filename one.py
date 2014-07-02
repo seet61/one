@@ -12,7 +12,8 @@ from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash
 
 # конфигурация
-pattern = "[a-zA-Zа-яА-Я0-9]"
+pattern_login = "[a-zA-Zа-яА-Я]"
+pattern_pass = "[a-zA-Zа-яА-Я0-9]"
 DATABASE = 'one.db'
 DEBUG = True
 SECRET_KEY = "\x972\x0e'\xe9\x89\xa0\xd6\xa7\xbe\x88\xe1\xb7s\x06\xf4\xb63\xd5J"
@@ -97,15 +98,17 @@ def registration():
     """Страница регистрации"""
     error=None
     if request.method == 'POST':
-        if not re.search(pattern, request.form['username']):
+        if len(request.form['username']) < 4 or not re.search(pattern_login, request.form['username']):
             error = 'Invalid username'
-        elif not re.search(pattern, request.form['password']):
+        elif len(request.form['password']) < 8 or not re.search(pattern_pass, request.form['password']):
             error = 'Invalid password'
         else:
             db = get_db()
             db.execute('insert into users (login, password) values (?, ?)',
                     [request.form['username'], request.form['password']])
-        return redirect(url_for('login'))
+            
+            flash('You was succesfully sign up.')
+            return redirect(url_for('login'))
     return render_template('registration.html', error=error)
 
 @app.route('/information', methods=['GET', 'POST'])
@@ -117,14 +120,6 @@ def information():
         db = get_db()
         db.execute('insert into vkinfo (username, vkid, password) values (?, ?, ?)',  
                 [request.form['username'], request.form['vkid'], request.form['password']])
-        #if request.form['vkid'] != app.config['USERNAME']:
-        #    error = 'Invalid username'
-        #elif request.form['password'] != app.config['PASSWORD']:
-        #    error = 'Invalid password'
-        #else:
-        #    session['logged_in'] = True
-        #    flash('You were logged in.')
-        #    return redirect(url_for('show_tracks'))
     return render_template('information.html', error=error)    
         
 
