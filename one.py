@@ -36,7 +36,6 @@ app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 def connect_db():
     """Устанавливаем соединение с базой данных"""
     connect = sqlite3.connect(app.config['DATABASE'])
-    connect.row_factory = sqlite3.Row
     return connect
 
 def init_db():
@@ -67,23 +66,47 @@ def show_tracks():
         return redirect(url_for('login'))
     else:
         db = get_db()
-        cur = db.execute('select artist, title from tracks order by id desc')
+        cur = db.cursor()
+        cur = cur.execute('select artist, title from tracks order by id desc')
         entries = cur.fetchall()
     return render_template('show_tracks.html')
+
+def check_user(username):
+    """Проверяем зарегистрирован ли пользователь"""
+    db = get_db()
+    cur = db.execute("select * from users where login = (?)", (username))
+    cur = cur.fetchall()
+    if len(cur) != 0:
+        status = True
+        password = list(cur[0])[2]
+    else:
+        status = False
+        password = None
+    return status, password
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     """Страница авторизации"""
     error=None
     if request.method == 'POST':
-        if request.form['username'] != app.config['USERNAME']:
-            error = 'Invalid username'
-        elif request.form['password'] != app.config['PASSWORD']:
-            error = 'Invalid password'
+        status, password = check_user(request.form['username'])
+        if status == True:
+            if request.form['password'] == password:
+                session['logged_in'] = True
+                flash('You were logged in.')
+                return redirect(url_for('show_tracks'))
+            else:
+                error = 'Invalid password'
         else:
-            session['logged_in'] = True
-            flash('You were logged in.')
-            return redirect(url_for('show_tracks'))
+            error = 'Invalid username'
+        #request.form['username'] != app.config['USERNAME']:
+        #    error = 'Invalid username'
+        #elif request.form['password'] != app.config['PASSWORD']:
+        #    error = 'Invalid password'
+        #else:
+        #    session['logged_in'] = True
+        #    flash('You were logged in.')
+        #    return redirect(url_for('show_tracks'))
     return render_template('login.html', error=error)
 
 @app.route('/logout')
@@ -104,26 +127,35 @@ def registration():
             error = 'Invalid password'
         else:
             db = get_db()
-            db.execute('insert into users (login, password) values (?, ?)',
-                    [request.form['username'], request.form['password']])
-            
-            flash('You was succesfully sign up.')
-            return redirect(url_for('login'))
+            try:
+                db.execute('insert into users (login, password) values (?, ?)',
+                        (request.form['username'], request.form['password']))
+                db.commit()
+                flash('You was succesfully sign up.')
+                return redirect(url_for('login'))
+            except sqlite3.DatabaseError as err:
+                error = err
     return render_template('registration.html', error=error)
 
 @app.route('/information', methods=['GET', 'POST'])
 def information():
     """Страница внесения информации для работы скрипта vkMusicSync"""
     error=None
+    if not session.get('logged_in'):
+        abort(401)
     #необходимо создать таблицу с информацией о пользователе
     if request.method == 'POST':
         db = get_db()
-        db.execute('insert into vkinfo (username, vkid, password) values (?, ?, ?)',  
-                [request.form['username'], request.form['vkid'], request.form['password']])
+        try:
+            db.execute('insert into vkinfo (username, vkid, password) values (?, ?, ?)',  
+                    [request.form['username'], request.form['vkid'], request.form['password']])
+            db.commit()
+        except sqlite3.DatabaseError as err:
+            error = err
     return render_template('information.html', error=error)    
         
 
 if __name__ == '__main__':
-    app.run('172.26.17.88')
-
+    #app.run('172.26.17.88')
+    app.run('10.1.10.101')
 
