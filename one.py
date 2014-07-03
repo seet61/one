@@ -93,7 +93,7 @@ def login():
     """Страница авторизации"""
     error=None
     if request.method == 'POST':
-        #прописать правило проверки длины логина и пароля
+        #прописать правило проверки длины логина и пароля  
         status, password = check_user(request.form['username'])
         if status == True:
             if request.form['password'].encode('utf8') == password:
