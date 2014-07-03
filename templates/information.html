@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block body %}
+	<h2>Login</h2>
+	{% if error %}<p class=error><strong>Error</strong> {{ error }}{% endif %}
+	<form action="{{  url_for('information') }}" method=post>
+		<dl>
+			<dt>vkID:
+			<dd><input type=text name='vkID'>
+			<dt>vkPass:
+			<dd><input type=password name='vkPass'>
+			<dd><input type=Submit value=Save>
+		</dl>
+	</form> 
+{% endblock %}

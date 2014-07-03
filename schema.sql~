@@ -13,6 +13,7 @@ create table users (
 );
 create table users_info (
 	id integer primary key autoincrement,
+	login text not null,
 	vkid text not null,
 	password text not null
 );

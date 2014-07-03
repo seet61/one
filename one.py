@@ -11,12 +11,16 @@ import os, sqlite3, re
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash
 
+#Кто вошел в систему
+whoami = ''
+
 # конфигурация
 pattern_login = "[a-zA-Zа-яА-Я]"
 pattern_pass = "[a-zA-Zа-яА-Я0-9]"
 DATABASE = 'one.db'
 DEBUG = True
 SECRET_KEY = "\x972\x0e'\xe9\x89\xa0\xd6\xa7\xbe\x88\xe1\xb7s\x06\xf4\xb63\xd5J"
+
 
 # создаем приложение
 app = Flask(__name__)
@@ -74,11 +78,11 @@ def show_tracks():
 def check_user(username):
     """Проверяем зарегистрирован ли пользователь"""
     db = get_db()
-    cur = db.execute("select * from users where login = (?)", (username))
-    cur = cur.fetchall()
+    cur = db.execute("select login, password from users where login='{0}'".format(username))
+    cur = cur.fetchall()[0]
     if len(cur) != 0:
         status = True
-        password = list(cur[0])[2]
+        password = list(cur)[1]
     else:
         status = False
         password = None
@@ -89,24 +93,18 @@ def login():
     """Страница авторизации"""
     error=None
     if request.method == 'POST':
+        #прописать правило проверки длины логина и пароля
         status, password = check_user(request.form['username'])
         if status == True:
-            if request.form['password'] == password:
+            if request.form['password'].encode('utf8') == password:
                 session['logged_in'] = True
                 flash('You were logged in.')
+                whoami = request.form['username']
                 return redirect(url_for('show_tracks'))
             else:
                 error = 'Invalid password'
         else:
             error = 'Invalid username'
-        #request.form['username'] != app.config['USERNAME']:
-        #    error = 'Invalid username'
-        #elif request.form['password'] != app.config['PASSWORD']:
-        #    error = 'Invalid password'
-        #else:
-        #    session['logged_in'] = True
-        #    flash('You were logged in.')
-        #    return redirect(url_for('show_tracks'))
     return render_template('login.html', error=error)
 
 @app.route('/logout')
@@ -141,15 +139,14 @@ def registration():
 def information():
     """Страница внесения информации для работы скрипта vkMusicSync"""
     error=None
-    if not session.get('logged_in'):
-        abort(401)
-    #необходимо создать таблицу с информацией о пользователе
     if request.method == 'POST':
         db = get_db()
         try:
-            db.execute('insert into vkinfo (username, vkid, password) values (?, ?, ?)',  
-                    [request.form['username'], request.form['vkid'], request.form['password']])
+            db.execute('insert into vkinfo (login, vkID, vkPass) values (?, ?, ?)',  
+                    [whoami, request.form['vkID'], request.form['vkPass']])
             db.commit()
+            flash('Your information was saved!')
+            return redirect(url_for('show_tracks'))
         except sqlite3.DatabaseError as err:
             error = err
     return render_template('information.html', error=error)    
