@@ -71,8 +71,14 @@ def show_tracks():
     else:
         db = get_db()
         cur = db.cursor()
-        cur = cur.execute('select artist, title from tracks order by id desc')
-        entries = cur.fetchall()
+        flash(whoami)
+        usertracks = "select artist,title from %s" % 'seet'
+        #Доделать норамальные запросы в базу о трэках!!!!!!!!!!!!
+        cur = cur.execute(usertracks)
+        if len(cur.fetchall()) != 0:
+            entries = cur.fetchall()
+        else:
+            entries = 'No tracks'
     return render_template('show_tracks.html')
 
 def check_user(username):
@@ -100,6 +106,7 @@ def login():
                 session['logged_in'] = True
                 flash('You were logged in.')
                 whoami = request.form['username']
+                #flash(whoami)
                 return redirect(url_for('show_tracks'))
             else:
                 error = 'Invalid password'
@@ -128,6 +135,8 @@ def registration():
             try:
                 db.execute('insert into users (login, password) values (?, ?)',
                         (request.form['username'], request.form['password']))
+                usertable = 'create table %s (id integer primary key autoincrement, artist text not null, title text not null)' % whoami
+                db.executescript(usertable)
                 db.commit()
                 flash('You was succesfully sign up.')
                 return redirect(url_for('login'))
@@ -139,11 +148,13 @@ def registration():
 def information():
     """Страница внесения информации для работы скрипта vkMusicSync"""
     error=None
-    if request.method == 'POST':
-        db = get_db()
+    if request.method == 'GET':
         try:
-            db.execute('insert into vkinfo (login, vkID, vkPass) values (?, ?, ?)',  
-                    [whoami, request.form['vkID'], request.form['vkPass']])
+            db = get_db()
+            # Доделать инcерт в базу данных информации и пользователе.
+            db = db.cursor()
+            userinfo = "insert into users_info (login, vkID, vkPass) values (?, ?, ?)"
+            db.execute(userinfo, [whoami, request.form['vkLogin'], request.form['vkPass']])
             db.commit()
             flash('Your information was saved!')
             return redirect(url_for('show_tracks'))
@@ -154,5 +165,5 @@ def information():
 
 if __name__ == '__main__':
     #app.run('172.26.17.88')
-    app.run('10.1.10.101')
+    app.run('10.1.10.102')
 

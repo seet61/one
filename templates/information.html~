@@ -2,12 +2,12 @@
 {% block body %}
 	<h2>Login</h2>
 	{% if error %}<p class=error><strong>Error</strong> {{ error }}{% endif %}
-	<form action="{{  url_for('information') }}" method=post>
+	<form action="{{  url_for('information') }}" method=get>
 		<dl>
-			<dt>Username:
-			<dd><input type=text name='vkID'>
-			<dt>Password:
-			<dd><input type=password name='vkPass'>
+			<dt>vkLogin:
+			<dd><input type=text name=vkLogin>
+			<dt>vkPass:
+			<dd><input type=password name=vkPass>
 			<dd><input type=Submit value=Save>
 		</dl>
 	</form> 
