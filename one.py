@@ -83,6 +83,7 @@ def show_tracks():
 
 def check_user(username):
     """Проверяем зарегистрирован ли пользователь"""
+    global status
     db = get_db()
     cur = db.execute("select login, password from users where login='{0}'".format(username))
     cur = cur.fetchall()[0]
@@ -105,6 +106,7 @@ def login():
             if request.form['password'].encode('utf8') == password:
                 session['logged_in'] = True
                 flash('You were logged in.')
+                global whoami
                 whoami = request.form['username']
                 #flash(whoami)
                 return redirect(url_for('show_tracks'))
@@ -148,18 +150,16 @@ def registration():
 def information():
     """Страница внесения информации для работы скрипта vkMusicSync"""
     error=None
-    if request.method == 'GET':
-        try:
-            db = get_db()
+    #if request.method == 'POST':
+    #    if request.method == 'POST':
+    #        db = get_db()
             # Доделать инcерт в базу данных информации и пользователе.
-            db = db.cursor()
-            userinfo = "insert into users_info (login, vkID, vkPass) values (?, ?, ?)"
-            db.execute(userinfo, [whoami, request.form['vkLogin'], request.form['vkPass']])
-            db.commit()
-            flash('Your information was saved!')
-            return redirect(url_for('show_tracks'))
-        except sqlite3.DatabaseError as err:
-            error = err
+    #        cur = db.cursor()
+    #        userinfo = "insert into users_info (login, vkID, vkPass) values (?, ?, ?)"
+            #cur.execute(userinfo, [whoami, request.form['vkLogin'].encode('utf8'), request.form['vkPass'].encode('utf8')])
+    #        db.commit()
+    flash('Your information was saved!')
+            #return redirect(url_for('show_tracks'))
     return render_template('information.html', error=error)    
         
 
