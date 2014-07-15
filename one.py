@@ -71,7 +71,7 @@ def show_tracks():
     else:
         db = get_db()
         cur = db.cursor()
-        flash(whoami)
+        #flash(whoami)
         usertracks = "select artist,title from %s" % 'seet'
         #Доделать норамальные запросы в базу о трэках!!!!!!!!!!!!
         cur = cur.execute(usertracks)
@@ -165,5 +165,6 @@ def information():
 
 if __name__ == '__main__':
     #app.run('172.26.17.88')
-    app.run('10.1.10.102')
+    #app.run('10.1.10.102')
+    app.run()
 
