@@ -1,50 +1,85 @@
-{% extends "layout.html" %}
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  
-<script type="text/javascript" src="http://cdn.jsdelivr.net/jquery/1.10.2/jquery-1.10.2.min.js"></script>
-<script type="text/javascript" src="static/mediaelement-and-player.min.js"></script>
-<script type="text/javascript" src="static/mep-feature-playlist.js"></script>
+<!doctype html>
+<title>Web player for VK</title>
+<!-- <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}"> -->
 
-<link type="text/css" rel="stylesheet" href="static/mediaelementplayer.min.css" />
-<link type="text/css" rel="stylesheet" href="static/mep-feature-playlist.css" />
+<style>
+body{
+    font-family:arial;
+}
+    #mediawrapper{
 
-<script>
-    $(function(){
-        $('video,audio').mediaelementplayer({
-                   loop: true,
-        shuffle: true,
-        playlist: true,
-        audioHeight: 30,
-        playlistposition: 'bottom',
-        features: ['playlistfeature', 'prevtrack', 'playpause', 'nexttrack', 'loop', 'shuffle', 'playlist', 'current', 'progress', 'duration', 'volume'],
-            keyActions: []
-        });
+    margin-left: auto;
+    margin-right:auto;
+    margin-top:30px;
+    width:430px;
+    }
+    h1{
+        text-align: center;
+    }
 
- 
-
-    });
-
-</script>
+    .tagline{
+        text-align: center;
+    }
 
 
-<style id="jsbin-css"></style>
-</head>
+</style>
 
-{% block body %}
-	{% if session.logged_in %}
-		<div id="mediawrapper">
-		<audio id="mejs" type="audio/mp3" controls="controls">
-			<Source src="C:\Users\DArefev\one\Alphaville - Forever Young .mp3" title="Alphaville - Forever Young"></Source>
-		</audio>
-		</div>
-		<ul classentries>
-			{% for entry in entries %}
-				<li><h2>{{ entry.title }}</h2>{{ entry.text|safe }}
-			{% else %}
-				<li><em>No such tracks for you.</em>
-			{% endfor %}
-		</ul>
-		<a href="https://github.com/seet61/one/"><img style="position: absolute; top: 0; right: 0; border: 0;" src="static/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+<div class=page>
+	<h1>Web player for VK</h1>
+	<div class=metanav>
+	{% if not session.logged_in %}
+		<a href="{{ url_for('login') }}">log in</a>
+	{% else %}
+		<a href="{{ url_for('logout') }}">log out</a>
 	{% endif %}
-{% endblock %}
+	<form action="{{  url_for('information') }}" method=post>
+		<dl>
+			<dd><input type=Submit value='Info'>
+		</dl>
+	</form>
+	</div>
+	{% for message in get_flashed_messages() %}
+		<div class=flash>{{ message }}</div>
+	{% endfor %}
+
+	{% block body %}
+		{% if session.logged_in %}
+			<script type="text/javascript" src="http://cdn.jsdelivr.net/jquery/1.10.2/jquery-1.10.2.min.js"></script>
+			<script type="text/javascript" src="static/mediaelement-and-player.min.js"></script>
+			<script type="text/javascript" src="static/mep-feature-playlist.js"></script>
+
+			<link type="text/css" rel="stylesheet" href="static/mediaelementplayer.min.css" />
+			<link type="text/css" rel="stylesheet" href="static/mep-feature-playlist.css" />
+
+			<script>
+			$(function(){
+				$('video,audio').mediaelementplayer({
+						loop: true,
+				shuffle: true,
+				playlist: true,
+				audioHeight: 30,
+				playlistposition: 'bottom',
+				features: ['playlistfeature', 'prevtrack', 'playpause', 'nexttrack', 'loop', 'shuffle', 'playlist', 'current', 'progress', 'duration', 'volume'],
+					keyActions: []
+				});
+			});
+			</script>
+
+			<style id="jsbin-css"></style>
+			</head>
+			<div id="mediawrapper">
+			<audio id="mejs" type="audio/mp3" controls="controls">
+				<Source src="static/Alphaville-ForeverYoung.mp3" title="Alphaville - Forever Young"></Source>
+			</audio>
+			</div>
+			<ul classentries>
+				{% for entry in entries %}
+					<li><h2>{{ entry.title }}</h2>{{ entry.text|safe }}
+				{% else %}
+					<li><em>No such tracks for you.</em>
+				{% endfor %}
+			</ul>
+			<a href="https://github.com/seet61/one/"><img style="position: absolute; top: 0; right: 0; border: 0;" src="static/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+		{% endif %}
+	{% endblock %}
+</div>
