@@ -2,9 +2,9 @@
 <title>Web player for VK</title>
 <!-- Разметка данной страницы будет отличаться от других, поэтому не будем заимствовать стили основной страницы-->
 
-<!-- <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}"> -->
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style_show.css') }}">
   
-<style>
+<!--<style>
 body{
     font-family:arial;
 }
@@ -24,7 +24,7 @@ body{
     }
 
 
-</style>
+</style> -->
 
 <div class=page>
 	<h1>Web player for VK</h1>
@@ -72,15 +72,17 @@ body{
 			<div id="mediawrapper">
 			<audio id="mejs" type="audio/mp3" controls="controls">
 				<Source src="static/Alphaville-ForeverYoung.mp3" title="Alphaville - Forever Young"></Source>
-			</audio>
-			</div>
-			<ul classentries>
+				<ul classentries>
 				{% for entry in entries %}
-					<li><h2>{{ entry.title }}</h2>{{ entry.text|safe }}
+					<h2>{{ entry.title }}</h2>{{ entry.text|safe }}
 				{% else %}
-					<li><em>No such tracks for you.</em>
+					<em>No such tracks for you.</em>
 				{% endfor %}
-			</ul>
+				</ul>
+			</audio>
+
+
+			</div>
 			<a href="https://github.com/seet61/one/"><img style="position: absolute; top: 0; right: 0; border: 0;" src="static/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 		{% endif %}
 	{% endblock %}
