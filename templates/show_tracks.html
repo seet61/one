@@ -4,30 +4,7 @@
 
 <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style_show.css') }}">
   
-<!--<style>
-body{
-    font-family:arial;
-}
-    #mediawrapper{
-
-    margin-left: auto;
-    margin-right:auto;
-    margin-top:30px;
-    width:430px;
-    }
-    h1{
-        text-align: center;
-    }
-
-    .tagline{
-        text-align: center;
-    }
-
-
-</style> -->
-
 <div class=page>
-	<h1>Web player for VK</h1>
 	<div class=metanav>
 	{% if not session.logged_in %}
 		<a href="{{ url_for('login') }}">log in</a>
@@ -46,22 +23,22 @@ body{
 
 	{% block body %}
 		{% if session.logged_in %}
-			<script type="text/javascript" src="http://cdn.jsdelivr.net/jquery/1.10.2/jquery-1.10.2.min.js"></script>
-			<script type="text/javascript" src="static/mediaelement-and-player.min.js"></script>
-			<script type="text/javascript" src="static/mep-feature-playlist.js"></script>
+			<script type="text/javascript" src="../static/jquery-1.10.2.min.js"></script>
+			<script type="text/javascript" src="../static/mediaelement-and-player.min.js"></script>
+			<script type="text/javascript" src="../static/mep-feature-playlist.js"></script>
 
-			<link type="text/css" rel="stylesheet" href="static/mediaelementplayer.min.css" />
-			<link type="text/css" rel="stylesheet" href="static/mep-feature-playlist.css" />
+			<link type="text/css" rel="stylesheet" href="../static/mediaelementplayer.min.css" />
+			<link type="text/css" rel="stylesheet" href="../static/mep-feature-playlist.css" />
 
 			<script>
 			$(function(){
 				$('video,audio').mediaelementplayer({
-						loop: true,
+				loop: true,
 				shuffle: true,
 				playlist: true,
 				audioHeight: 30,
 				playlistposition: 'bottom',
-				features: ['playlistfeature', 'prevtrack', 'playpause', 'nexttrack', 'loop', 'shuffle', 'playlist', 'current', 'progress', 'duration', 'volume'],
+				features: ['playlistfeature', 'prevtrack', 'playpause', 'nexttrack', 'repeatonoff','loop', 'shuffle', 'playlist', 'current', 'progress', 'duration', 'volume'],
 					keyActions: []
 				});
 			});

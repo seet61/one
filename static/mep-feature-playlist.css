@@ -4,6 +4,30 @@
     Original Author : Junaid Qadir Baloch <shekhanzai.baloch@gmail.com>
 */
 
+/* Start: Play/Pause/Stop */
+.mejs-controls .mejs-play button {
+	background: transparent url(controls.png) no-repeat;
+	background-position: 0 0;
+}
+
+.mejs-controls .mejs-pause button {
+	background: transparent url(controls.png) no-repeat;
+	background-position: 0 -16px;
+}
+/* Start: Play/Pause/Stop */
+
+/* Start: Repeat On/Off */
+.mejs-controls .mejs-repeat-on button {
+	background: transparent url(controls.png) no-repeat;
+	background-position: -90px 0;
+}
+
+.mejs-controls .mejs-repeat-off button {
+	background: transparent url(controls.png) no-repeat;
+	background-position: -90px -16px;
+}
+/* Start: Play/Pause/Stop */
+
 /* Start: Show/Hide Playlist*/
 .mejs-controls .mejs-show-playlist button {
   background: transparent url(controls-playlist.png) no-repeat;

@@ -1,18 +1,21 @@
-body			{ font-family: sans-serif; background: #eee; }
+body			{ font-family: arial; background: url(music-headphone-wallpaper.jpg); }
 a, h1, h2		{ color: #377ba8; }
 h1, h2			{ font-family: 'Georgia', serif; margin: 0em auto; }
-h1				{ border-bottom: 2px solid #eee; }
-h2				{ font-size: 1.2em; }
+h1			{ border-bottom: 2px solid #eee; text-align: center; }
+h2			{ font-size: 1.2em; }
 
 .page			{ margin: 2em auto; width: 35em;  }
 .entries		{ list-style: none; margin: 0; padding: 0; }
 .entries li		{ margin: 0.8em 1.2em; }
 .entries li h2		{ margin-left: -1em; }
 .add-entry		{ font-size: 0.9em; border-bottom: 1px sold #ccc; }
-.add-emtry dl	{ font-weight: bold; }
+.add-emtry dl		{ font-weight: bold; }
 .metanav		{ text-align: right; font-size: 0.8em; padding: 0.3 em;
 				  margin-bottom: 1em; background: #fafafa; }
 .flash			{ background: #cee5F5; padding: 0.5em;
 				  border: 1px sold #aacbe2; }
 .error			{ background: #f0d6d6; padding: 0.5em; }
-.audio			{ margin: 0.8em 1.2em; }
+.audio			{ margin: 0.8em .2em; }
+#mediawrapper		{ margin-left: auto; margin-right: auto; margin-top: 30px; width: 430px; }
+.tagline		{ text-align: center; }
+
