@@ -2,24 +2,18 @@
 <title>Web player for VK</title>
 <!-- Разметка данной страницы будет отличаться от других, поэтому не будем заимствовать стили основной страницы-->
 
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style_show.css') }}">
+<head>
+	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style_show.css') }}">
+</head>
   
-<div class=page>
 	<div class=metanav>
 	{% if not session.logged_in %}
 		<a href="{{ url_for('login') }}">log in</a>
 	{% else %}
 		<a href="{{ url_for('logout') }}">log out</a>
 	{% endif %}
-	<form action="{{  url_for('information') }}" method=post>
-		<dl>
-			<dd><input type=Submit value='Info'>
-		</dl>
-	</form>
+	<a href="{{  url_for('information') }}">Info</a>	
 	</div>
-	{% for message in get_flashed_messages() %}
-		<div class=flash>{{ message }}</div>
-	{% endfor %}
 
 	{% block body %}
 		{% if session.logged_in %}
@@ -48,13 +42,14 @@
 			</head>
 			<div id="mediawrapper">
 			<audio id="mejs" type="audio/mp3" controls="controls">
-				<Source src="static/Alphaville-ForeverYoung.mp3" title="Alphaville - Forever Young"></Source>
-				<ul classentries>
+				<!-- <Source src="static/Alphaville-ForeverYoung.mp3" title="Alphaville - Forever Young"></Source> -->
 				{% for entry in entries %}
 					<h2>{{ entry.title }}</h2>{{ entry.text|safe }}
 				{% else %}
-					<em>No such tracks for you.</em>
+					<Source src="static/Alphaville-ForeverYoung.mp3" title="Demo track"></Source>
 				{% endfor %}
+				<ul classentries>
+				
 				</ul>
 			</audio>
 
@@ -63,4 +58,4 @@
 			<a href="https://github.com/seet61/one/"><img style="position: absolute; top: 0; right: 0; border: 0;" src="static/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
 		{% endif %}
 	{% endblock %}
-</div>
+

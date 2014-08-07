@@ -120,7 +120,7 @@ def login():
 def logout():
     """Страница выхода"""
     session.pop('logged_in', None)
-    flash('You were logged out.')
+    #flash('You were logged out.')
     return redirect(url_for('login'))
 
 @app.route('/registration', methods=['GET', 'POST'])
@@ -165,6 +165,6 @@ def information():
 
 if __name__ == '__main__':
     #app.run('172.26.17.88')
-    #app.run('10.1.10.102')
-    app.run()
+    app.run('10.1.10.103')
+    #app.run()
 

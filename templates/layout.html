@@ -9,11 +9,7 @@
 	{% else %}
 		<a href="{{ url_for('logout') }}">log out</a>
 	{% endif %}
-	<form action="{{  url_for('information') }}" method=post>
-		<dl>
-			<dd><input type=Submit value='Info'>
-		</dl>
-	</form>
+	<a href="{{  url_for('information') }}">Info</a>
 	</div>
 	{% for message in get_flashed_messages() %}
 		<div class=flash>{{ message }}</div>
