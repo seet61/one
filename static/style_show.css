@@ -1,4 +1,4 @@
-body			{ font-family: arial; background: url(music-headphone-wallpaper.jpg); background-position: center, center; }
+body			{ font-family: arial; background: url(music-headphone-wallpaper.jpg); }
 a, h1, h2		{ color: #377ba8; }
 h1, h2			{ font-family: 'Georgia', serif; margin: 0em auto; }
 h1			{ border-bottom: 2px solid #eee; text-align: center; }
@@ -9,11 +9,12 @@ h2			{ font-size: 1.2em; }
 .entries li h2		{ margin-left: -1em; }
 .add-entry		{ font-size: 0.9em; border-bottom: 1px sold #ccc; }
 .add-emtry dl		{ font-weight: bold; }
-.metanav a		{ display: inline; text-transform: uppercase; font-weight: bold; text-align: left; }
+/*.metanav a		{ display: inline; text-transform: uppercase; font-weight: bold; text-align: left; } */
 .flash			{ background: #cee5F5; padding: 0.5em;
 				  border: 1px sold #aacbe2; }
 .error			{ background: #f0d6d6; padding: 0.5em; }
 .audio			{ margin: 0.8em .2em; }
-#mediawrapper		{ margin-left: auto; margin-right: auto; margin-top: 30px; width: 430px; }
+#mediawrapper	{ margin-left: auto; margin-right: auto; margin-top: 30px; width: 430px; }
 .tagline		{ text-align: center; }
-
+div		    { border: 1px solid white; width: 60px; height: 25px; border-radius: 5px; padding: auto; text-align: center; /*display: inline-block; */}
+div a 			{ text-decoration: none; }

@@ -165,6 +165,6 @@ def information():
 
 if __name__ == '__main__':
     #app.run('172.26.17.88')
-    app.run('10.1.10.103')
-    #app.run()
+    #app.run('10.1.10.103')
+    app.run()
 
