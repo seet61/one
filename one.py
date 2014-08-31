@@ -69,17 +69,12 @@ def show_tracks():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
-        db = get_db()
-        cur = db.cursor()
-        #flash(whoami)
-        usertracks = "select artist,title from %s" % 'seet'
-        #Доделать норамальные запросы в базу о трэках!!!!!!!!!!!!
-        cur = cur.execute(usertracks)
-        if len(cur.fetchall()) != 0:
-            entries = cur.fetchall()
-        else:
-            entries = 'No tracks'
-    return render_template('show_tracks.html')
+        '''Получаем список файлов из конкретной папки'''
+        directory = os.path.join(os.getcwd(), 'static/vkmusic')
+        entries = os.listdir(directory)
+        for i in xrange(len(entries)):
+            entries[i] = 'static/vkmusic/' + entries[i].decode('utf-8')
+    return render_template('show_tracks.html', entries=entries)
 
 def check_user(username):
     """Проверяем зарегистрирован ли пользователь"""
@@ -146,25 +141,7 @@ def registration():
                 error = err
     return render_template('registration.html', error=error)
 
-@app.route('/information', methods=['GET', 'POST'])
-def information():
-    """Страница внесения информации для работы скрипта vkMusicSync"""
-    error=None
-    #if request.method == 'POST':
-    #    if request.method == 'POST':
-    #        db = get_db()
-            # Доделать инcерт в базу данных информации и пользователе.
-    #        cur = db.cursor()
-    #        userinfo = "insert into users_info (login, vkID, vkPass) values (?, ?, ?)"
-            #cur.execute(userinfo, [whoami, request.form['vkLogin'].encode('utf8'), request.form['vkPass'].encode('utf8')])
-    #        db.commit()
-    flash('Your information was saved!')
-            #return redirect(url_for('show_tracks'))
-    return render_template('information.html', error=error)    
-        
-
 if __name__ == '__main__':
-    #app.run('172.26.17.88')
-    #app.run('10.1.10.103')
-    app.run()
+    app.run('10.1.10.100')
+    #app.run()
 
