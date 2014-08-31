@@ -103,7 +103,6 @@ def login():
                 flash('You were logged in.')
                 global whoami
                 whoami = request.form['username']
-                #flash(whoami)
                 return redirect(url_for('show_tracks'))
             else:
                 error = 'Invalid password'
