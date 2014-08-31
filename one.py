@@ -7,7 +7,7 @@
 """
 
 # все импорты
-import os, sqlite3, re
+import os, sqlite3, re, configparser
 from flask import Flask, request, session, g, redirect, url_for, \
      abort, render_template, flash
 
@@ -29,7 +29,6 @@ app.config.from_object(__name__)
 # загружаем конфигурацию
 app.config.update(dict(
     DATABASE=os.path.join(app.root_path, 'one.db'),
-    DEBUG=True,
     SECRET_KEY="\x972\x0e'\xe9\x89\xa0\xd6\xa7\xbe\x88\xe1\xb7s\x06\xf4\xb63\xd5J",
     USERNAME='admin',
     PASSWORD='default'
@@ -100,7 +99,6 @@ def login():
         if status == True:
             if request.form['password'].encode('utf8') == password:
                 session['logged_in'] = True
-                flash('You were logged in.')
                 global whoami
                 whoami = request.form['username']
                 return redirect(url_for('show_tracks'))
@@ -141,6 +139,7 @@ def registration():
     return render_template('registration.html', error=error)
 
 if __name__ == '__main__':
-    app.run('10.1.10.100')
-    #app.run()
+    config = configparser.ConfigParser()
+    config.read(os.path.join(os.getcwd(), 'one.cfg'))
+    app.run(host = str(config['DEFAULT']['IP']), port = int(config['DEFAULT']['PORT']), debug = str(config['DEFAULT']['DEBUG']))
 
